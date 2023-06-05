@@ -1,3 +1,7 @@
+--Exploring mental health and total hours of sunshine 
+--Datasets downloaded from Kaggle
+
+
 --Count number of distinct countries in each table. 
 SELECT Count(distinct Entity)
 FROM MentalHealth
