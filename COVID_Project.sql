@@ -1,35 +1,41 @@
+--Exploring Global data on COVID deaths and vaccinations.
+--Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, Creating Views, Converting Data Types--
+
 Select *
 FROM coviddeaths
 WHERE continent is not NULL
 order by 3,4 
 
-select location, date, total_cases, new_cases, total_deaths, population
- FROM coviddeaths
+SELECT location, date, total_cases, new_cases, total_deaths, population
+FROM coviddeaths
  ORDER BY 1,2 
 
- --Calculating total cases vs total deaths 
- --Shows liklihood of dying from COVID in your country
- SELECT
+ --Total cases vs total deaths 
+ --Shows liklihood of dying from COVID in The United States
+ 
+SELECT
 location, date, total_cases, total_deaths, (CAST(total_deaths AS float) /total_cases)*100 AS DeathPercentage
 FROM Coviddeaths
 WHERE location like '%states%' 
 ORDER by 1,2 
 
---Total cases vs population (what percentage of population got COVID)
+--Total cases vs population (what percentage of the US population got COVID?)
+
 SELECT
 location, date, population, total_cases, (CAST (total_cases AS float)/ CAST(population AS float))*100 AS CasePercentage
 FROM Coviddeaths
 WHERE location like '%states%' 
 ORDER by 1,2 
 
---Finding countries with highest infection rates compared to population
+--Find the countries with the highest infection rates compared to population
+
 SELECT
 location, population, MAX(total_cases) AS HighestInfectionCount, MAX(total_cases / CAST(population AS float))*100 AS PercentPopulationInfected
 FROM Coviddeaths 
 GROUP BY location, population 
 ORDER by PercentPopulationInfected DESC
 
---Finding coutnries with highest death count per popluation
+--Find countries with highest death count per popluation
 
 SELECT location, MAX(total_deaths) AS TotalDeathCount
 FROM coviddeaths
@@ -37,8 +43,8 @@ WHERE Continent is NOT NULL
 Group BY Location, Population
 ORDER BY TotalDeathCount DESC
 
+--Find continents with highest death count 
 
---Showing continents with highest death count 
 SELECT location, MAX(total_deaths) AS TotalDeathCount
 FROM coviddeaths
 WHERE Continent is null
@@ -60,14 +66,15 @@ WHERE continent is not null
 order by 1,2 
 
 
---Joins everything from both tables.
+--Join tables
 SELECT *
 FROM coviddeaths Dea
 JOIN vaccinations Vac
     ON dea.location =vac.location AND
      dea.date = vac.date
 
---Looking at total population vs vaccinations
+--Population vs Vaccinations
+--Exploring percent of population that has received at least one dose of the COVID vaccine
 
 SELECT dea.continent , dea.location, dea.date, dea.population, vac.new_vaccinations,
 SUM(vac.new_vaccinations) OVER (partition BY dea.location ORDER BY dea.location, dea.date) AS RollingVaccinatedCount
@@ -78,7 +85,7 @@ JOIN vaccinations Vac
      WHERE dea.continent is not null 
      ORDER By 2,3 
 
---USE CTE
+--Use CTE to perform calculations using pervious query
 
 WITH PopVsVac (Continent, Location, Date, population, new_vaccinations, RollingVaccinatedCount)
 AS
@@ -96,6 +103,8 @@ JOIN vaccinations Vac
      From PopVsVac 
     ORDER By 2,3 
 GO 
+
+--Store data in a taview to use in BI tool later
 
 CREATE VIEW PopVsVac
  AS
