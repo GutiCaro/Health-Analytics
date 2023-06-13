@@ -1,8 +1,8 @@
---Exploring percentage of the population with mental health disorders and total hours of sunshine different parts of the world receive
+--Exploring hours of sunshine and mental health disorders in countries 
 --Datasets downloaded from Kaggle
 
 
---Count number of distinct countries in each table. 
+--Count number of distinct countries in each table that has data on depression rates. 
 
 SELECT Count(distinct Entity)
 FROM MentalHealth
@@ -11,7 +11,7 @@ WHERE Code is NOT NULL AND depression is not NULL;
 SELECT Count(distinct Country)
 FROM sunshineHours;
 
---Explore sunshine hours and 2017 depression rates
+--View sunshine hours and 2017 depression rates
 
 SELECT mh.year, country, city, s.total_hours, mh.depression
 FROM sunshineHours s
@@ -50,8 +50,7 @@ AND mh.year = 2017
 Select *
 FROM AvgSunVsDepression
 
---Create views for Visualizations
-
+--Create views
 --Average yearly total of sunshine hours and percentage of the population with depression per country 
 
 CREATE VIEW AvgSunVsDepression AS
@@ -76,7 +75,7 @@ ON s.country = mh.entity
 WHERE mh.Code is NOT NULL AND mh.Anxiety_disorders is not NULL 
 AND mh.year = 2017 
 
-----Average yearly total sunshine hours and percentage of the population with Alcohol Use Disorder
+--Average yearly total sunshine hours and percentage of the population with Alcohol Use Disorder
 
 CREATE VIEW AlcoholVsSun AS
 SELECT country, city, s.total_hours, 
