@@ -60,6 +60,7 @@ GROUP BY date
 order by 1,2 
 
 --Total of entire chart(dates not included)
+
 SELECT SUM(new_cases) AS TotalCases, SUM(new_deaths) as Total_Deaths, SUM(new_deaths)/SUM(cast(new_cases as float))*100 AS DeathPercentage
 FROM coviddeaths 
 WHERE continent is not null
@@ -67,6 +68,7 @@ order by 1,2
 
 
 --Join tables
+
 SELECT *
 FROM coviddeaths Dea
 JOIN vaccinations Vac
@@ -104,7 +106,7 @@ JOIN vaccinations Vac
     ORDER By 2,3 
 GO 
 
---Store data in a taview to use in BI tool later
+--Create view to use in Tableau later
 
 CREATE VIEW PopVsVac
  AS
