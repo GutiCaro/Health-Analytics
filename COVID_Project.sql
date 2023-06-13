@@ -11,7 +11,7 @@ FROM coviddeaths
  ORDER BY 1,2 
 
  --Total cases vs total deaths 
- --Shows liklihood of dying from COVID in The United States
+ --Shows likelihood of dying from COVID in The United States
  
 SELECT
 location, date, total_cases, total_deaths, (CAST(total_deaths AS float) /total_cases)*100 AS DeathPercentage
